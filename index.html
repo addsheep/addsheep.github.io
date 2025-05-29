@@ -6,6 +6,8 @@
   
   <script>const KEY = "fdf0a6e7f06f49d3b343706a36ba1a3b"
 function main() {
+  document.getElementById("_loading").style.display = "block"
+  
   fetch('https://tavusapi.com/v2/conversations',
         {
           method: 'GET',
@@ -34,7 +36,11 @@ function findActive(data) {
 }
 
 function updateUrl(url) {
-  document.getElementById("_iframe").src = url
+  var iframe = document.getElementById("_iframe")
+  iframe.src = url
+  iframe.style.display = "block"
+
+  document.getElementById("_loading").style.display = "none"
 }
 
 function create() {
@@ -55,8 +61,8 @@ fetch('https://tavusapi.com/v2/conversations', options)
 </head>
 <body>
   <button onclick="main()">Click Me</button>
-  <div>
-    <iframe id="_iframe" allow="camera;microphone" width="100%" height="1024px"></iframe>
-  </div>
+  <img id="_loading" src="https://c.tenor.com/khzZ7-YSJW4AAAAC/tenor.gif" width="100%" style="display:none"></img>
+  <iframe id="_iframe" allow="camera;microphone" width="100%" height="1024px" style="display:none"></iframe>
+  
 </body>
 </html>
