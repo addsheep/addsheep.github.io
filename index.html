@@ -3,48 +3,60 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Centered Button</title>
-  <style>
-    body, html {
-      height: 100%;
-      margin: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #f0f0f0;
-      font-family: Arial, sans-serif;
-    }
+  
+  <script>const KEY = "fdf0a6e7f06f49d3b343706a36ba1a3b"
+function main() {
+  fetch('https://tavusapi.com/v2/conversations',
+        {
+          method: 'GET',
+          headers: {"x-api-key": KEY}
+        })
+    .then(response => response.json())
+    .then(response => {
+      console.log(response)
+      var url = findActive(response.data)
+      if (url != null) {
+        updateUrl(url)
+      } else {
+        create()
+      }
+    })
+    .catch(err => console.error(err));
+}
 
-    button {
-      padding: 15px 30px;
-      font-size: 18px;
-      border: none;
-      border-radius: 8px;
-      background-color: #4CAF50;
-      color: white;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
+function findActive(data) {
+  for (const obj of data) {
+    if (obj.status == "active") {
+      return obj.conversation_url
     }
+  }
+  return null
+}
 
-    button:hover {
-      background-color: #45a049;
-    }
-  </style>
+function updateUrl(url) {
+  document.getElementById("_iframe").src = url
+}
 
-  <script>
-    function main() {
-      fetch('https://tavusapi.com/v2/conversations', 
-            {
-              method: 'GET',
-              headers: {"x-api-key": "0903346bd5994cacafb723b7e7489d01"}
-            })
-        .then(response => response.json())
-        .then(response => console.log(response))
-        .catch(err => console.error(err));
-    }
+function create() {
+  const options = {
+  method: 'POST',
+  headers: {'x-api-key': KEY, 'Content-Type': 'application/json'},
+  body: '{"replica_id":"rb17cf590e15","persona_id":"p732fe31006f","conversation_name":"A meeting with the patient","conversational_context":"you are about to meet your patient for a regular health checkup. you should ask about their physical and mental status and give personalized advice"}'
+};
+
+fetch('https://tavusapi.com/v2/conversations', options)
+  .then(response => response.json())
+  .then(response => {
+    updateUrl(response.conversation_url)
+  })
+  .catch(err => console.error(err));
+}
   </script>
 </head>
 <body>
   <button onclick="main()">Click Me</button>
+  <div>
+    <iframe id="_iframe" allow="camera;microphone" width="100%" height="1024px"></iframe>
+  </div>
 </body>
 </html>
