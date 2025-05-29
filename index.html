@@ -47,7 +47,7 @@ function create() {
   const options = {
   method: 'POST',
   headers: {'x-api-key': KEY, 'Content-Type': 'application/json'},
-  body: '{"replica_id":"rb17cf590e15","persona_id":"p732fe31006f","conversation_name":"A meeting with the patient","conversational_context":"you are about to meet your patient for a regular health checkup. you should ask about their physical and mental status and give personalized advice"}'
+  body: '{"replica_id":"rb17cf590e15","persona_id":"p732fe31006f","conversation_name":"A meeting with the patient","properties":{"participant_absent_timeout":30,"participant_left_timeout":10}, "conversational_context":"you are about to meet your patient for a regular health checkup. you should ask about their physical and mental status and give personalized advice"}'
 };
 
 fetch('https://tavusapi.com/v2/conversations', options)
